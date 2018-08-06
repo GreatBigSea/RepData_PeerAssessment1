@@ -11,7 +11,7 @@ library("ggplot2")
 Read the provided data and change the format of the dates
 
 ```{r}
-activity_data <- read.csv("./RepData_PeerAssessment1/activity.csv")
+activity_data <- read.csv("activity.csv")
 activity_data$date <- as.Date(as.character(activity_data$date), "%Y-%m-%d")
 ```
 
@@ -47,8 +47,6 @@ The caluclate the maximum of avarage steps per interval and define the interval
 ```{r}
 max_interval <- filter(avg_interval, avg_int == max(avg_int))
 max_interval
-##max_interval$interval
-##max_interval$avg_int
 ```
 
 The missing data ('NA') is substitued by the average of steps of the same interval. For this it's searched by the interval for the row number, than the avarage is transformed into a data frame and added to the original data.
@@ -68,6 +66,14 @@ hist_steps_added <- ggplot(total_day_added, aes(steps_per_day)) +
     ggtitle("Total steps per day incl. added values")
 print(hist_steps_added)
 ```
+
+The calculated mean and median of steps per days while with the added data
+
+```{r}
+summarise(total_day_added, mean = mean(total_day_added$steps_per_day, na.rm = TRUE), median = median(total_day_added$steps_per_day, na.rm = TRUE))
+```
+
+The mean and the median is nearly the same before and after the substitution of the avarage steps per interval instead of the missing values.
 
 At first there's a list of all used weekdays of which we take only the days Monday till Friday.
 After this we added a new variable to the data which indicated the weekday or weekend. 

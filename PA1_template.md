@@ -13,7 +13,7 @@ Read the provided data and change the format of the dates
 
 
 ```r
-activity_data <- read.csv("./RepData_PeerAssessment1/activity.csv")
+activity_data <- read.csv("activity.csv")
 activity_data$date <- as.Date(as.character(activity_data$date), "%Y-%m-%d")
 ```
 
@@ -73,11 +73,6 @@ max_interval
 ## 1      835    206.
 ```
 
-```r
-##max_interval$interval
-##max_interval$avg_int
-```
-
 The missing data ('NA') is substitued by the average of steps of the same interval. For this it's searched by the interval for the row number, than the avarage is transformed into a data frame and added to the original data.
 
 After this the data is grouped by date and the sum of steps per day as base for the histogram.
@@ -99,6 +94,22 @@ print(hist_steps_added)
 
 ![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png)
 
+The calculated mean and median of steps per days while with the added data
+
+
+```r
+summarise(total_day_added, mean = mean(total_day_added$steps_per_day, na.rm = TRUE), median = median(total_day_added$steps_per_day, na.rm = TRUE))
+```
+
+```
+## # A tibble: 1 x 2
+##     mean median
+##    <dbl>  <dbl>
+## 1 10766. 10766.
+```
+
+The mean and the median is nearly the same before and after the substitution of the avarage steps per interval instead of the missing values.
+
 At first there's a list of all used weekdays of which we take only the days Monday till Friday.
 After this we added a new variable to the data which indicated the weekday or weekend. 
 Than the data is grouped by interval and weekday/weekdend to get the mean of steps and plot them in a line diagram.
@@ -113,5 +124,5 @@ avg_interval_week <- weekdays_end %>% group_by(interval, weekday) %>% summarise(
 qplot(interval, avg_int, data = avg_interval_week, facets = weekday~., geom = "line", colour = weekday, main = "Average steps per interval and weekday/weekend", xlab = "Interval", ylab = "Average steps per interval")
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
 
